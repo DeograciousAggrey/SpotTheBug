@@ -2,4 +2,5 @@
  Upon inspecting the BabyCommitment smart contract, it is obvious that the contract implements an integer commitment scheme which is a form of secret commit-reveal scheme. 
  Such schemes are used for example in DARK polynomial commitments, which are used in some Zero-knowledge proofs as supersonic.
 
- 
+ *For the sake of the challenge the commitment scheme implememnted in the contract omits random number inclusion in commitment calculation.
+ *Also, we can ignore the fcat that the commitments's secret number can be seen in the blockchain.
