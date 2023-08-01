@@ -11,3 +11,4 @@ BabyCommitment smart contract implements an integer commitment with an unknown o
 To further exploit this scheme, we need to consider the characteristics of the group order utilised in the smart contract.
 Group order being unknown is the crucial part in determining the security of the scheme.
 
+If it was chosen a finite group with prime modulus (Z/nZ)* then the order could be easily calculated via the Euler totient function: φ(n) = n - 1.
