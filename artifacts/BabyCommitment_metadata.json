@@ -1,0 +1,100 @@
+{
+	"compiler": {
+		"version": "0.8.17+commit.8df45f5f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "secret",
+						"type": "uint256"
+					}
+				],
+				"name": "commit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "commitments",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "openingNumber",
+						"type": "uint256"
+					}
+				],
+				"name": "reveal",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"commit(uint256)": {
+					"notice": "TODO: consider to add a random number with secret in commitment scheme"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"BabyCommitment.sol": "BabyCommitment"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"BabyCommitment.sol": {
+			"keccak256": "0xe871fcf7bc615bfaa93c8b980d3e4c9982cb1c1de2588d74148368643606d495",
+			"urls": [
+				"bzz-raw://f7d36566fa48c34939f83f7fd275e2b91f4138d7413575a387b761bfc4fd1ad7",
+				"dweb:/ipfs/QmSR11KRF6YFEtze5v1VmH3ZbUvYzN8i7WKAZ8eDrATs8W"
+			]
+		}
+	},
+	"version": 1
+}
