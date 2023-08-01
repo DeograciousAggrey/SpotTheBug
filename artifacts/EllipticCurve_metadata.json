@@ -159,10 +159,10 @@
 	},
 	"sources": {
 		"EllipticCurve.sol": {
-			"keccak256": "0xe8f8652624d7d4be2fcc04f915e11f1c86e7488390360ac561fc1939934fece0",
+			"keccak256": "0x35b5bb8036a8852b9117691985df19d9dd909325b58c5881b5ec2ea86a4fe966",
 			"urls": [
-				"bzz-raw://eaf144de6a82591e519ff946685085450d0fbc08a99c706ab942cbeda21686f8",
-				"dweb:/ipfs/QmZZscwMx6NkTwkpdBvm2TMWfgRpNShs2bjnmFdovu688Z"
+				"bzz-raw://eb8b1f46462d3dfec2d7ee0ad3191732f773413da62f50a3c243567525501758",
+				"dweb:/ipfs/QmZgeqEUxf1Aknmsx2kg8bPSHZ2NE9VooPJSd4n1vKH5Px"
 			]
 		}
 	},
