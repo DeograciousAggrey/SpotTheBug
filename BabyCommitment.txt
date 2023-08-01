@@ -1,0 +1,5 @@
+        ANALYZING THE SMART CONTRACT
+ Upon inspecting the BabyCommitment smart contract, it is obvious that the contract implements an integer commitment scheme which is a form of secret commit-reveal scheme. 
+ Such schemes are used for example in DARK polynomial commitments, which are used in some Zero-knowledge proofs as supersonic.
+
+ 
