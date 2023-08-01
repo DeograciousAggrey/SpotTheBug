@@ -1,14 +1,46 @@
-        ANALYZING THE SMART CONTRACT
- Upon inspecting the BabyCommitment smart contract, it is obvious that the contract implements an integer commitment scheme which is a form of secret commit-reveal scheme. 
- Such schemes are used for example in DARK polynomial commitments, which are used in some Zero-knowledge proofs as supersonic.
+Analyzing the smart contract
+Upon inspecting the BabyCommitment smart contract, it is obvious that the contract implements an integer commitment scheme which is a form of secret commit-reveal scheme. Such schemes are used for example in DARK polynomial commitments (https://eprint.iacr.org/2019/1229.pdf) which are used in some Zero-knowledge proofs as Supersonic.
 
- *For the sake of the challenge the commitment scheme implememnted in the contract omits random number inclusion in commitment calculation.
- *Also, we can ignore the fcat that the commitments's secret number can be seen in the blockchain.
+For the sake of the challenge the commitment scheme implemented in the contract omits random number inclusion in commitment calculation. Also, we can ignore the fact that the commitment’s secret number can be seen in the blockchain.
 
+Finding the Group Order
 
-        FINDING THE GROUP ORDER
-BabyCommitment smart contract implements an integer commitment with an unknown order group.
-To further exploit this scheme, we need to consider the characteristics of the group order utilised in the smart contract.
-Group order being unknown is the crucial part in determining the security of the scheme.
+BabyCommitment smart contract implements an integer commitment with an unknown-order group. To further exploit the scheme, we need to consider the characteristics of the group order utilized in the smart contract. Group order being unknown is the crucial part in determining the security of the scheme.
 
 If it was chosen a finite group with prime modulus (Z/nZ)* then the order could be easily calculated via the Euler totient function: φ(n) = n - 1.
+
+
+
+So malleability could be easily exploited: if g is the group’s generator then 
+
+	gi = gi+(n-1)
+
+But in the smart contract, the modulus 891774460845375173125266058974437262797511322331985127 is not a prime number, we can ensure it by using FactorDB (http://factordb.com):
+
+891774460845375173125266058974437262797511322331985127 = 11 * 31337 * 46091 * 56129192858827520816193436882886842322337671
+
+As the integer commitment scheme uses a multiplicative group (Z/nZ)* with a non prime modulus, the security of the scheme can be exploited if a dishonest prover can find the order of the group. Order of the group is calculated via the Euler totient function, before that the dishonest prover must factorize the modulus. As we saw, FactorDB can factorize it. An attacker can calculate the Euler totient:
+
+φ(modulus) = (p1-1)*(p2-1)*(p3-1)*(p4-1)
+φ(modulus)=(11-1)*(31337-1)*(46091-1)*(56129192858827520816193436882886842322337671 -1)
+φ(modulus)= 810660596163822625729335881338931289747787180379608000
+
+
+
+
+Exploiting Malleability
+
+By utilizing the factorization obtained from FactorDB, an attacker can calculate the Euler function to determine the order. Once the order is known, the attacker can leverage the malleability of the commitment scheme to manipulate the commitment process.
+
+After φ(modulus) calculation, dishonest prover can exploit the malleability of the commitment scheme
+
+Commit some secret value, denoted as ‘s’
+REveal the value ‘s + φ(modulus),’ where φ(modulus) is the Euler totient function of the modulus
+The attack takes advantage of the malleability property of the commitment scheme, where 2s (mod modulus) is equivalent to 2(s+ φ(modulus)). This manipulation allows the attacker to undermine the integrity and security of the commitment process.
+
+Attack will work as 2s(mod modulus) = 2s+ φ(modulus) (mod modulus)
+
+The vulnerabilities uncovered in the BabyCommitment smart contract underscore the risks associated with flawed cryptographic implementations. By addressing these vulnerabilities and understanding the potential exploits, developers can fortify their coding practices.
+
+
+
