@@ -4,3 +4,10 @@
 
  *For the sake of the challenge the commitment scheme implememnted in the contract omits random number inclusion in commitment calculation.
  *Also, we can ignore the fcat that the commitments's secret number can be seen in the blockchain.
+
+
+        FINDING THE GROUP ORDER
+BabyCommitment smart contract implements an integer commitment with an unknown order group.
+To further exploit this scheme, we need to consider the characteristics of the group order utilised in the smart contract.
+Group order being unknown is the crucial part in determining the security of the scheme.
+
