@@ -34,10 +34,10 @@ contract EllipticCurve {
             require(r != 0 && s != 0 && r < n && s < n / 2 + 1, "Wrong signature");
 
             uint w = modInverse(s, n);
-            uint ul = mulmod(uint(sha256(abi.encodePacked(message))), w, n);
+            uint u1 = mulmod(uint(sha256(abi.encodePacked(message))), w, n);
             uint u2 = mulmod(r, w, n);
 
-            Point memory result = pointAddition(pointMultiply(generator, ul), pointMultiply(publicKey, u2));
+            Point memory result = pointAddition(pointMultiply(generator, u1), pointMultiply(publicKey, u2));
                         return (result.x == r % n);
 
     }                    
