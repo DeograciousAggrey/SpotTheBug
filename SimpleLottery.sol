@@ -114,7 +114,8 @@ contract SimpleLottery is VRFConsumerBase {
         require(ticketCount > 0, "No tickets purchased yet");
 
         bytes32 requestId = requestRandomness(keyHash, fee); // Request a random number from Chainlink VRF
-        requestRandomnessId = requestId; // Save the requestId for verification purposes (not used in this simplified version)
+        requestRandomnessId = requestId; // Save the requestId for verification purposes 
+        return 0;
     }
 
     /// @dev Callback function called by Chainlink VRF to fulfill the randomness request.

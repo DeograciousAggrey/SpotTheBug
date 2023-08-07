@@ -319,11 +319,11 @@
 			]
 		},
 		"SimpleLottery.sol": {
-			"keccak256": "0x4d4e1e76ce5067e58bfc3807146bd61b8030105d3148aba98c5216b1b530da6c",
+			"keccak256": "0x93027d378fd19664f70054daea387547efa36d2e3bda6bae15caa37c74582c88",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4833f5b58d44368d82df8c72b0f2ac2dc7971c3c8486286c09121668ce4884fe",
-				"dweb:/ipfs/QmZauRsYAVJ8M49BFHdPhiJhsJRCDHbAHtLyeBriw4VAGA"
+				"bzz-raw://5950655deedf965b9884d71abd648eb8301ec7fcc3df6f86396564832b1cdcdf",
+				"dweb:/ipfs/Qmcx9VQXnxzK1D91mddXUqSFRXi8CD9yQ6vEsiJA4er8kB"
 			]
 		}
 	},
