@@ -130,6 +130,25 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "players",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "requestId",
 						"type": "bytes32"
@@ -319,11 +338,11 @@
 			]
 		},
 		"SimpleLottery.sol": {
-			"keccak256": "0x93027d378fd19664f70054daea387547efa36d2e3bda6bae15caa37c74582c88",
+			"keccak256": "0x39cb4b2b10a0c7145de46c8dfb265c2d2a2150a5ad46160c0c949acb2ee15d2d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5950655deedf965b9884d71abd648eb8301ec7fcc3df6f86396564832b1cdcdf",
-				"dweb:/ipfs/Qmcx9VQXnxzK1D91mddXUqSFRXi8CD9yQ6vEsiJA4er8kB"
+				"bzz-raw://0b51ca727d4c18fa09624e4d8865f5b4e4388af2d808a519aa2013592629cf82",
+				"dweb:/ipfs/QmbxXUMXorJ7BAcG1UMFMsFDiC5yRxokTqmmxdkgP2CyQv"
 			]
 		}
 	},
