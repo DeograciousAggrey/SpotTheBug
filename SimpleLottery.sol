@@ -12,9 +12,14 @@ contract SimpleLottery is VRFConsumerBase {
     uint256 private randomResult; //Variable to store random number
     bytes32 internal keyHash; // Chainlink VRF key hash
     uint256 internal fee; // Chainlink VRF fee
+    address[] public players; //Array of player addresses
     bytes32 internal requestRandomnessId; // Request ID for Chainlink VRF
 
     mapping(address => uint256) public tickets; // Mapping to store the number of tickets purchased by each player
+    mapping (address=> bool) private uniquePlayers; // Mapping to check if player is already added to array
+
+    bool private prizeWithdrawn = false; //Check if the prize has been withdrawn
+    bool private randomRequestInProgress = false;
 
     event TicketPurchased(address indexed player, uint256 tickets); // Event emitted when tickets are purchased
     event WinnerDrawn(address indexed winner); // Event emitted when the winner is drawn
@@ -54,8 +59,13 @@ contract SimpleLottery is VRFConsumerBase {
     function buyTicket(uint256 numberOfTickets) external payable {
         require(numberOfTickets > 0, "Number of tickets should be greater than 0");
         require(msg.value >= ticketPrice * numberOfTickets, "Not enough ether sent");
+        require(address(this).balance >= ticketPrice * numberOfTickets, "Contract has insufficient funds");
 
         tickets[msg.sender] += numberOfTickets; // Update the number of tickets purchased by the player
+        if(!uniquePlayers[msg.sender]){ // If the player is not added to the array yet
+            players.push(msg.sender); //Add the player to the array
+            uniquePlayers[msg.sender] = true; //Mark player as added
+        }
         ticketCount += numberOfTickets; // Increase the total number of tickets sold
 
         emit TicketPurchased(msg.sender, numberOfTickets);
@@ -64,26 +74,12 @@ contract SimpleLottery is VRFConsumerBase {
     /// @dev Draws the winner of the lottery using a random number from Chainlink VRF.
     /// @notice Only the owner of the contract can call this function, and the winner cannot be drawn again.
     function drawWinner() external onlyOwner notWinnerSelected {
-        require(ticketCount > 0, "No tickets purchased yet");
+    require(ticketCount > 0, "No tickets purchased yet");
+    require(!randomRequestInProgress, "Random number request already in progress");
 
-        uint256 randomNum = getRandomNumber();
-        uint256 winnerIndex = randomNum % ticketCount;
-        address[] memory players = new address[](ticketCount);
-        uint256 index = 0;
+    getRandomNumber(); // Request a random number from Chainlink VRF
+}
 
-        // Create an array of unique player addresses with tickets
-        for (uint256 i = 0; i < ticketCount; i++) {
-            if (tickets[address(this)] > 0) {
-                players[index] = address(this);
-                index++;
-            }
-        }
-
-        // Select the winner address from the array using the random index
-        winner = players[winnerIndex];
-
-        emit WinnerDrawn(winner);
-    }
 
     /// @dev Returns the address of the current winner.
     /// @return The address of the winner if the winner has been drawn, otherwise reverts with an error message.
@@ -101,21 +97,26 @@ contract SimpleLottery is VRFConsumerBase {
     /// @notice The winner must have been drawn before calling this function.
     function withdrawPrize() external onlyOwner {
         require(winner != address(0), "Winner has not been drawn yet");
+        require(!prizeWithdrawn, "Prize has already been withdrawn");
 
         uint256 prizeAmount = ticketPrice * ticketCount; // Calculate the prize amount
+        require(address(this).balance >= prizeAmount, "Not enough Ether to pay the prize");
+
         payable(winner).transfer(prizeAmount); // Transfer the prize to the winner
+        prizeWithdrawn = true;
     }
 
     /// @dev Requests a random number from Chainlink VRF.
-    /// @return requestId The request ID generated for the randomness request.
-    function getRandomNumber() internal returns (uint256) {
+    
+    function getRandomNumber() internal  {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK to pay fee");
         require(keyHash != bytes32(0), "Must have valid keyHash");
         require(ticketCount > 0, "No tickets purchased yet");
+        require(!randomRequestInProgress, "Random number request already in progress");
 
         bytes32 requestId = requestRandomness(keyHash, fee); // Request a random number from Chainlink VRF
         requestRandomnessId = requestId; // Save the requestId for verification purposes 
-        return 0;
+        randomRequestInProgress = true;
     }
 
     /// @dev Callback function called by Chainlink VRF to fulfill the randomness request.
@@ -125,8 +126,14 @@ contract SimpleLottery is VRFConsumerBase {
         // Ensure the request was made by this contract and the random number is not 0
         require(requestId == requestRandomnessId, "Wrong requestId");
         require(randomness > 0, "Random number not generated");
-
         randomResult = randomness; // Store the random number in the contract
+
+        uint256 winnerIndex = randomness % players.length; // Use the random number to get an index
+        winner = players[winnerIndex]; // Select the winner address from the array
+        emit WinnerDrawn(winner);
+
+        randomRequestInProgress = false; //Reset the flag
+
     }
 
     /// @dev Returns the latest random number generated by Chainlink VRF.
