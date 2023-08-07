@@ -9,6 +9,7 @@ contract SimpleLottery is VRFConsumerBase {
     uint256 public ticketPrice; // Price per ticket in wei
     uint256 public ticketCount; // Total number of tickets sold
     address public winner; // Address of the winner
+    uint256 private randomResult; //Variable to store random number
     bytes32 internal keyHash; // Chainlink VRF key hash
     uint256 internal fee; // Chainlink VRF fee
     bytes32 internal requestRandomnessId; // Request ID for Chainlink VRF
