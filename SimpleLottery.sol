@@ -10,6 +10,7 @@ contract SimpleLottery is VRFConsumerBase {
     address public winner;
     bytes32 internal keyHash;
     uint256 internal fee;
+    bytes32 internal requestRandomnessId;
 
     mapping(address => uint256) public tickets;
 
@@ -53,7 +54,20 @@ contract SimpleLottery is VRFConsumerBase {
         require(ticketCount > 0, "No tickets purchased yet");
 
         uint256 randomNum = getRandomNumber();
-        winner = address(uint160(address(this))) + (randomNum % ticketCount);
+        uint256 winnerIndex = randomNum % ticketCount;
+        address[] memory players = new address[](ticketCount);
+        uint256 index = 0;
+
+        // Create an array of unique player addresses
+        for (uint256 i = 0; i < ticketCount; i++) {
+            if (tickets[address(this)] > 0) {
+                players[index] = address(this);
+                index++;
+            }
+        }
+
+        // Select the winner address from the array using the random index
+        winner = players[winnerIndex];
 
         emit WinnerDrawn(winner);
     }
@@ -76,10 +90,23 @@ contract SimpleLottery is VRFConsumerBase {
 
     function getRandomNumber() internal returns (uint256) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK to pay fee");
-        return requestRandomness(keyHash, fee);
+        require(keyHash != bytes32(0), "Must have valid keyHash");
+        require(ticketCount > 0, "No tickets purchased yet");
+
+        bytes32 requestId = requestRandomness(keyHash, fee);
+        requestRandomnessId = requestId; // Save the requestId for verification purposes (not used in this simplified version)
     }
 
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
-        // Random number received from Chainlink VRF, but not used in this simplified version.
+        // Ensure the request was made by this contract and the random number is not 0
+        require(requestId == requestRandomnessId, "Wrong requestId");
+        require(randomness > 0, "Random number not generated");
+
+        randomResult = randomness;
+    }
+
+    // Add a getter function for retrieving the randomResult
+    function getRandomResult() external view returns (uint256) {
+        return randomResult;
     }
 }
